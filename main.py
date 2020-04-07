@@ -5,7 +5,7 @@
 # @v1.0.0
 
 #begin imports 
-from WTForms import Form, BooleanField, StringField, validators
+#from WTForms import Form, BooleanField, StringField, validators
 from flask import Flask, render_template
 #end imports 
 
@@ -19,9 +19,9 @@ def homePage():
     #authentication 
     #route 
     #results and variables to pass EXAMPLE @ v1 & v2 
-    v1 = 0; #item to pass
-    v2 = 'my string'; #item to pass
-    return render_template('index.html', v1, v2)#must pass any info you wish to use on page through here 
+    v1 = 0 #item to pass
+    v2 = 'my string' #item to pass
+    return render_template('index.html')#must pass any info you wish to use on page through here 
 
 #@app.route('/page2')
 #def p2():
