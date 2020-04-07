@@ -5,7 +5,7 @@
 # @v1.0.0
 
 #begin imports 
-#from WTForms import Form, BooleanField, StringField, validators
+from WTForms import Form, BooleanField, StringField, validators
 from flask import Flask, render_template
 #end imports 
 
@@ -13,7 +13,15 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 # route() decorator binds a function to a URL
-@app.route('/')
+@app.route('/') 
 def homePage():
-    return render_template('index.html')
+    #api instuction here or script (suggested here(python) if you dont know JS & bootstrap)
+    #authentication 
+    #route 
+    #results and variables to pass EXAMPLE @ v1 & v2 
+    v1 = 0; #item to pass
+    v2 = 'my string'; #item to pass
+    return render_template('index.html', v1, v2)#must pass any info you wish to use on page through here 
 
+#@app.route('/page2')
+#def p2():
