@@ -5,9 +5,15 @@
 # @v1.0.0
 
 #begin imports 
-
+#from WTForms import Form, BooleanField, StringField, validators
+from flask import Flask, render_template
 #end imports 
 
+# create an instance of the Flask class
+app = Flask(__name__)
 
+# route() decorator binds a function to a URL
+@app.route('/')
+def homePage():
+    return render_template('index.html')
 
-#END main.py 

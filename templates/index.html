@@ -1,0 +1,45 @@
+<!-- home.html -->
+
+{% block content %}
+<header>
+
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <link href="css/styles.css" rel="stylesheet" type="text/css" />
+      <!--<script SRC='js/functions.js'></script>   -->
+</header>
+
+
+<script>
+    $(document).ready(function()//DOM PREP
+    {
+	//begin event listeners 
+	if($('#dropD').val() == 'opt4'){
+		$("#result").hmtl("You are correct!");
+	}
+	//end event listeners 
+
+
+
+    });//end DOM 	
+</script>
+
+<main>
+	
+	<body>
+		<h1> Welcome to CST205 | LAB 11 </h1>
+		<img SRC=./Coors-Brewery.jpg>
+		
+		<p><strong>Skeleton:</strong> info here </p>
+
+	
+	
+	</body>
+
+</main>
+
+<footer>
+	<p> Kyle Xyian Dilbeck, , ,  | CST205 | Project 1 | CSUMB 2020  </p>
+</footer>
+{% endblock %}
