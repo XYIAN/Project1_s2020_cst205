@@ -179,6 +179,9 @@ class FavoriteWindow(QWidget):
 			title = QListWidgetItem(i)
 			title.setFlags(title.flags() | Qt.ItemIsUserCheckable)
 			title.setCheckState(Qt.Unchecked)
+			for fav in fav_subs:
+				if title.text() == fav:
+					title.setCheckState(Qt.Checked)
 			self.list.addItem(title)
 
 	#Updates Favorite Subscriptions List
