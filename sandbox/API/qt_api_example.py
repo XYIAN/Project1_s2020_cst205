@@ -4,6 +4,7 @@
 #Currently the check for new videos just pulls the latest 2 from the channel, can make day based later
 #Playlist maker currently not working
 #Also Want to make so you don't have to auth each time.
+#Also Might want to save favs in a different folder so It can be saved for future usage
 #API 
 import os
 import google_auth_oauthlib.flow
@@ -141,7 +142,7 @@ class MainWindow(QWidget):
 		self.video_list = find_videos(self.fav_current)
 		print(self.video_list)
 		msg = QMessageBox()
-		msg.setText("Video's added " + str(self.video_list))
+		msg.setText("Videos added " + str(self.video_list))
 		msg.exec_()
 
 
