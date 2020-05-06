@@ -4,6 +4,7 @@
 #Currently the check for new videos just pulls the latest 2 from the channel, can make day based later
 #Playlist maker currently not working
 #Also Want to make so you don't have to auth each time.
+
 #Also Might want to save favs in a different folder so It can be saved for future usage
 #API 
 import os
@@ -20,7 +21,7 @@ from PyQt5.QtCore import Qt
 from settings import SettingsWindow
 
 #API - Make into a class... somehow
-scopes = ["https://www.googleapis.com/auth/youtube.readonly",	"https://www.googleapis.com/auth/youtube"]
+scopes = ["https://www.googleapis.com/auth/youtube.readonly",	"https://www.googleapis.com/auth/youtube","https://www.googleapis.com/auth/youtube.force-ssl"]
 
 def auth():
 	# Disable OAuthlib's HTTPS verification when running locally.
@@ -65,8 +66,8 @@ def find_videos(favorites):
 			part='id',
 			channelId=channels,
 			maxResults=2,
-        	order="date",
-        	type="video"
+			order="date",
+			type="video"
 		)
 		response = request.execute()
 		# print(response)
@@ -80,17 +81,41 @@ def find_videos(favorites):
 
 # works up until here
 
-def create_playlist(youtube):
+def create_playlist(youtube): #change title of playlist to date
 	request = youtube.playlists().insert(
-		part="snippet",
+		part="snippet,status",
 		body={
-			"kind": "youtube#playlist",
 			"snippet": {
-				"title": "Test Playlist 01"
+				"title": "Test Playlist 01",
+				"description":"Test Description"
+		  },
+		  "status":{
+				"privacyStatus":"private"
 		  }	
 		}
 	)
-	response = request.execute()
+	playlist_info = request.execute()
+	print(playlist_info['id'])
+	return playlist_info['id']
+
+def add_videos_to_playlist(youtube,video_ids,playlist_id):
+	
+	for video in video_ids:
+		request = youtube.playlistItems().insert(
+			part="snippet",
+			body={
+			  "snippet": {
+				"playlistId": playlist_id,
+				"resourceId": {
+				  "kind": "youtube#video",
+				  "videoId": video
+				}
+			  }
+			}
+		)
+		response = request.execute()
+
+
 
 ######################################
 #pyqt
@@ -141,8 +166,10 @@ class MainWindow(QWidget):
 		self.fav_current = {key:value for key,value in self.all_subs.items() if key in fav_subs}
 		self.video_list = find_videos(self.fav_current)
 		print(self.video_list)
+		self.playlist_id = create_playlist(self.youtube_info)
+		add_videos_to_playlist(self.youtube_info,self.video_list,self.playlist_id)
 		msg = QMessageBox()
-		msg.setText("Videos added " + str(self.video_list))
+		msg.setText("Videos added " + str(self.video_list) + " to " + self.playlist_id + " playlist")
 		msg.exec_()
 
 
