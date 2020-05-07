@@ -1,7 +1,7 @@
 
 
 # After running and getting authcode, Pick Favorites, then Check for new videos
-# Currently the check for new videos just pulls the latest 2 from the channel, can make day based later
+# Currently the check for new videos just pulls the latest 2 from the channel
 # Clear data before pushing updates
 
 # TO DO:
@@ -23,7 +23,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QKeyEvent 
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import Qt
-from settings import SettingsWindow
 
 #Other
 from datetime import date
