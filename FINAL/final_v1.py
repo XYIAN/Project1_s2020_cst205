@@ -188,7 +188,9 @@ class MainWindow(QWidget):
 	def playlist_add(self):
 		self.all_subs = get_subs(self.youtube_info)
 		self.user_data = load_user_data()
-
+		#date check
+		today = date.today()
+		today_date = today.strftime("%m/%d/%y")
 
 		#Creates a dict with channel name and channel id
 		self.fav_current = {key:value for key,value in self.all_subs.items() if key in self.user_data["fav_subs"]}
@@ -196,9 +198,10 @@ class MainWindow(QWidget):
 		self.video_list = find_videos(self.fav_current)
 		self.new_videos = list(set(self.video_list).difference(self.user_data["today_videos"]))
 
-		#add check for date somewhere later
-		if (self.user_data["today_playlist"] == ""):
+		
+		if (self.user_data["today_playlist"] == "" or self.user_data["current_date"] != today_date ):
 			self.user_data["today_playlist"] = create_playlist(self.youtube_info)
+			self.user_data["current_date"] = today_date
 		add_videos_to_playlist(self.youtube_info, self.new_videos, self.user_data["today_playlist"])
 
 		# Updating user data
