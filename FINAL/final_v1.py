@@ -17,6 +17,8 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 from google_auth_oauthlib.flow import InstalledAppFlow
+from google.oauth2.credentials import Credentials
+from apiclient.discorvery import build
 #PYQT
 import sys
 from PyQt5.QtWidgets import *
@@ -30,9 +32,28 @@ import json
 #API - Make into a class... somehow
 scopes = ["https://www.googleapis.com/auth/youtube.readonly",	"https://www.googleapis.com/auth/youtube","https://www.googleapis.com/auth/youtube.force-ssl"]
 
+def loginSave():
+    SCOPES = ['https://www.googleapis.com/auth/drive.file']
+    client_config={
+            "installed":{
+                "auth_uri" : "https://accounts.google.com/o/oauth2/auth",
+                "token_uri": "https://accounts.google.com/o/oauth2/token",
+                "redirect_uris": ["urn:ietf:wg:oauth:2.0:oob"],
+                "client_id": "282059832027-l4lvaddcl0mtgka3hook75rfea87035u.apps.googleusercontent.com",
+                "project_id":"api-access-275200",
+                "client_secret":"Gk05LhRZNVlZH-WXVCuZfme-"
+                }
+            }
+    flow = InstalledAppFlow.from_client_config(client_config, SCOPES)
+    credentials = flow.run_console(); 
+
+    drive = build('drive','v3',credentials=credentials)
+    resp = drive.files().list().execute()
+    access_token=credentials.token
+    refresh_token=credentials.refresh_token
+    print(resp)
 #Auth method adapted from Youtube API example
 def auth():
-	
 	os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
 
 	api_service_name = "youtube"
