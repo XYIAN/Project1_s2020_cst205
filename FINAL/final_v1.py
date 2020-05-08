@@ -37,7 +37,7 @@ def auth():
 
 	api_service_name = "youtube"
 	api_version = "v3"
-	client_secrets_file = "client_secret_01.json" #ADD OWN JSON SECRETS FILE HERE
+	client_secrets_file = "KyleID.json" #ADD OWN JSON SECRETS FILE HERE
 
 	# Get credentials and create an API client
    
