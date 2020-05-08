@@ -18,7 +18,7 @@ import googleapiclient.discovery
 import googleapiclient.errors
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
-from apiclient.discorvery import build
+from apiclient.discovery import build
 #PYQT
 import sys
 from PyQt5.QtWidgets import *
