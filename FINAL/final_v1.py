@@ -7,7 +7,6 @@
 # TO DO:
 # -- Clean up code / More OOP
 # -- Make so you don't have to auth each time.
-# -- Check new videos by day, just not latest 2 videos
 # -- Maybe add more custom features
 
 
@@ -20,12 +19,12 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 #PYQT
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QIcon, QPixmap, QFont, QKeyEvent 
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import Qt
 
 #Other
-from datetime import date
+from datetime import date, datetime,timezone
 import json
 #API - Make into a class... somehow
 scopes = ["https://www.googleapis.com/auth/youtube.readonly",	"https://www.googleapis.com/auth/youtube","https://www.googleapis.com/auth/youtube.force-ssl"]
@@ -69,11 +68,15 @@ def get_subs(youtube):
 def find_videos(favorites):
 	video_title = []
 	video_id = []
+	today_date = date.today()
+	today_date = today_date.strftime('%Y-%m-%d')
+
 	for channels in favorites.values():
 		request = youtube.search().list(
 			part='id',
 			channelId=channels,
-			maxResults=2,
+			maxResults=20,
+			publishedAfter= today_date+"T00:00:00Z",
 			order="date",
 			type="video"
 		)
