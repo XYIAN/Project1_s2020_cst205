@@ -30,7 +30,9 @@ from datetime import date, datetime,timezone
 import json
 #API - Make into a class... somehow
 scopes = ["https://www.googleapis.com/auth/youtube.readonly",	"https://www.googleapis.com/auth/youtube","https://www.googleapis.com/auth/youtube.force-ssl"]
-
+# READ MEEEEEE
+#LOGING SAVE = authentication save to avoid repeated request loging, needs to be applied in auth to run
+#for now i deleted the call in auth so it runs correctly but you can simply add it by updating the youtube return
 def loginSave():
     SCOPES = ['https://www.googleapis.com/auth/drive.file']
     client_config={
