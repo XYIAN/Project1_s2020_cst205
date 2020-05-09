@@ -28,6 +28,8 @@ from PyQt5.QtCore import Qt
 #Other
 from datetime import date, datetime,timezone
 import json
+import webbrowser
+
 #API - Make into a class... somehow
 scopes = ["https://www.googleapis.com/auth/youtube.readonly",	"https://www.googleapis.com/auth/youtube","https://www.googleapis.com/auth/youtube.force-ssl"]
 # READ MEEEEEE
@@ -59,7 +61,7 @@ def auth():
 
 	api_service_name = "youtube"
 	api_version = "v3"
-	client_secrets_file = "KyleID.json" #ADD OWN JSON SECRETS FILE HERE
+	client_secrets_file = "client_secret_01.json" #ADD OWN JSON SECRETS FILE HERE
 
 	# Get credentials and create an API client
    
@@ -189,20 +191,25 @@ class MainWindow(QWidget):
 		self.sub_list_button.clicked.connect(self.fav_window)
 		layout.addWidget(self.sub_list_button,2,1,1,2)
 
+		self.goto_button = QPushButton("Open Playlist!")
+		self.goto_button.clicked.connect(self.goto_playlist)
+		layout.addWidget(self.goto_button,3,1,1,2)
+
 		self.clear_button = QPushButton("Clear Data!")
 		self.sub_list_button.clicked.connect(self.clear_data)
-		layout.addWidget(self.clear_button,3,1,1,2)
+		layout.addWidget(self.clear_button,4,1,1,2)
 
+	
 		self.setLayout(layout)
 		self.main_window_list = list()
 
 	@pyqtSlot()
 	def clear_data(self):
-		self.user_data = load_user_data()
-		self.user_data["fav_subs"] = []
-		self.user_data["today_playlist"] = ""
-		self.user_data["today_videos"] = []
-		save_user_data(self.user_data)
+		user_data = load_user_data()
+		user_data["fav_subs"] = []
+		user_data["today_playlist"] = ""
+		user_data["today_videos"] = []
+		save_user_data(user_data)
 
 
 	@pyqtSlot()
@@ -213,30 +220,42 @@ class MainWindow(QWidget):
 	@pyqtSlot()
 	def playlist_add(self):
 		self.all_subs = get_subs(self.youtube_info)
-		self.user_data = load_user_data()
+		user_data = load_user_data()
 		#date check
 		today = date.today()
 		today_date = today.strftime("%m/%d/%y")
 
 		#Creates a dict with channel name and channel id
-		self.fav_current = {key:value for key,value in self.all_subs.items() if key in self.user_data["fav_subs"]}
+		self.fav_current = {key:value for key,value in self.all_subs.items() if key in user_data["fav_subs"]}
 
 		self.video_list = find_videos(self.fav_current)
-		self.new_videos = list(set(self.video_list).difference(self.user_data["today_videos"]))
+		self.new_videos = list(set(self.video_list).difference(user_data["today_videos"]))
 
 		
-		if (self.user_data["today_playlist"] == "" or self.user_data["current_date"] != today_date ):
-			self.user_data["today_playlist"] = create_playlist(self.youtube_info)
-			self.user_data["current_date"] = today_date
-		add_videos_to_playlist(self.youtube_info, self.new_videos, self.user_data["today_playlist"])
+		if (user_data["today_playlist"] == "" or user_data["current_date"] != today_date ):
+			user_data["today_playlist"] = create_playlist(self.youtube_info)
+			user_data["current_date"] = today_date
+		add_videos_to_playlist(self.youtube_info, self.new_videos, user_data["today_playlist"])
 
 		# Updating user data
-		self.user_data["today_videos"].extend(self.new_videos)
-		save_user_data(self.user_data)
+		user_data["today_videos"].extend(self.new_videos)
+		save_user_data(user_data)
 
 		msg = QMessageBox()
 		msg.setText(str(len(self.new_videos)) + " Video(s) added to your playlist")
 		msg.exec_()
+
+	@pyqtSlot()
+	def goto_playlist(self):
+		user_data = load_user_data()
+		today = date.today()
+		today_date = today.strftime("%m/%d/%y")
+		if (user_data["today_playlist"] == "" or user_data["current_date"] != today_date ):
+			msg = QMessageBox()
+			msg.setText("No Playlist Created Today.")
+			msg.exec_()
+		else:
+			webbrowser.open('https://www.youtube.com/playlist?list='+ user_data["today_playlist"])
 
 
 
@@ -259,6 +278,10 @@ class FavoriteWindow(QWidget):
 		self.save_button = QPushButton("Save Favorites")
 		self.save_button.clicked.connect(self.save_list)
 		vbox.addWidget(self.save_button)
+
+		self.clear_all_button = QPushButton("Clear All Favorites")
+		self.clear_all_button.clicked.connect(self.clear_list)
+		vbox.addWidget(self.clear_all_button)
 		
 
 
@@ -286,6 +309,12 @@ class FavoriteWindow(QWidget):
 				self.user_data["fav_subs"].append(self.list.item(index).text())
 		save_user_data(self.user_data)
 		self.close()
+
+	# Clears Favorites List
+	@pyqtSlot()
+	def clear_list(self):
+		for index in range(len(self.list)):
+			self.list.item(index).setCheckState(Qt.Unchecked)
 
 
 	
