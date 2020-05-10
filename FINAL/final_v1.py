@@ -49,7 +49,6 @@ def loginSave():
             }
     flow = InstalledAppFlow.from_client_config(client_config, SCOPES)
     credentials = flow.run_console(); 
-
     drive = build('drive','v3',credentials=credentials)
     resp = drive.files().list().execute()
     access_token=credentials.token
@@ -57,22 +56,16 @@ def loginSave():
     print(resp)
 #Auth method adapted from Youtube API example
 def auth():
-	os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
-
-	api_service_name = "youtube"
-	api_version = "v3"
-	client_secrets_file = "client_secret_01.json" #ADD OWN JSON SECRETS FILE HERE
-
-	# Get credentials and create an API client
-   
-	flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-		client_secrets_file, scopes)
-	credentials = flow.run_console()
-
-	youtube = googleapiclient.discovery.build(
-		api_service_name, api_version, credentials=credentials)
-	return youtube
-	
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"]="0"
+    api_service_name="youtube"
+    api_version="v3"
+    client_secrets_file="KyleID.json"
+    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+	    client_secrets_file, scopes)
+    credentials = flow.run_console()
+    youtube = googleapiclient.discovery.build(
+	    api_service_name, api_version, credentials=credentials)
+    return youtube	
 def get_subs(youtube):
 	request = youtube.subscriptions().list(
 		part="snippet,contentDetails",
